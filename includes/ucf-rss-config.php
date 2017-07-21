@@ -81,6 +81,7 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 		public static function get_layouts() {
 			$layouts = array(
 				'default' => 'Default Layout',
+				'thumbnail' => 'Thumbnail Layout'
 			);
 
 			$layouts = apply_filters( self::$option_prefix . 'get_layouts', $layouts );
@@ -126,7 +127,7 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 					'options_page'    => true,
 					'sc_attr'         => false,
 					'field_title'     => 'Fallback Image',
-					'field_desc'      => '(Optional) Image to display when a feed item doesn\'t have an image. Note: Images are only supported with the card layout.',
+					'field_desc'      => '(Optional) Image to display when a feed item doesn\'t have an image. Only used on layouts that can display feed item images.',
 					'field_type'      => 'image',
 					'field_options_section' => 'ucf_rss_section_general'
 				) ),
@@ -134,7 +135,30 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 					'field_title'     => 'Feed URL',
 					'field_desc'      => 'URL that points to a valid RSS feed.',
 					'field_type'      => 'text'
-				) )
+				) ),
+				'offset'              => new UCF_RSS_Option( 'offset', array(
+					'default'         => 0,
+					'format_callback' => array( 'UCF_RSS_Config', 'format_option_offset' ),
+					'field_title'     => 'Offset',
+					'field_desc'      => 'Number of feed items that should be skipped. Leave blank or set to 0 to start from the first item in the feed.',
+					'field_type'      => 'number'
+				) ),
+				'limit'               => new UCF_RSS_Option( 'limit', array(
+					'default'         => 4,
+					'format_callback' => array( 'UCF_RSS_Config', 'format_option_limit' ),
+					'field_title'     => 'Limit',
+					'field_desc'      => 'The maximum number of feed items to return. Note that, for performance reasons, no more than 50 results can be returned at a time.',
+					'field_type'      => 'number'
+				) ),
+				'cache_expiration'    => new UCF_RSS_Option( 'cache_expiration', array(
+					'default'         => 3,  // hours
+					'format_callback' => 'intval',
+					'options_page'    => true,
+					'sc_attr'         => false,
+					'field_title'     => 'Cache Expiration',
+					'field_desc'      => 'Length of time, in hours, that feed data should be cached before fresh results are fetched.',
+					'field_type'      => 'number'
+				) ),
 			);
 
 			return $options;
@@ -351,6 +375,36 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 		 **/
 		public static function format_option_num_or_null( $val ) {
 			return is_null( $val ) ? $val : $val + 0;
+		}
+
+		/**
+		 * Custom formatting callback for the 'limit' option. Forces a sane
+		 * range of possible values.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $val Mixed | value to apply formatting to
+		 * @return int | formatted number value
+		 **/
+		public static function format_option_limit( $val ) {
+			$option = get_option( 'limit' );
+			$val = intval( $val );
+			return ( $val > 0 && $val <= 50 ) ? $val : $option->get_default();
+		}
+
+		/**
+		 * Custom formatting callback for the 'offset' option. Forces a sane
+		 * range of possible values (non-negative).
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $val Mixed | value to apply formatting to
+		 * @return int | formatted number value
+		 **/
+		public static function format_option_offset( $val ) {
+			$option = self::get_option( 'offset' );
+			$val = intval( $val );
+			return ( $val > 0 ) ? $val : $option->get_default();
 		}
 
 		/**

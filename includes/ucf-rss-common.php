@@ -27,6 +27,41 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 
 			return ob_get_clean();
 		}
+
+		/**
+		 * Returns the cache expiration for RSS feeds.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @return int | expiration, in seconds
+		 **/
+		public static function get_cache_expiration() {
+			return UCF_RSS_Config::get_option_or_default( 'cache_expiration' ) * HOUR_IN_SECONDS;
+		}
+
+		/**
+		 * Tries to return a thumbnail within a SimplePie item, or the fallback
+		 * image if available.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return mixed | img URL string, or false on failure
+		 **/
+		public static function get_simplepie_thumbnail_or_fallback( $item ) {
+			// Try to get a thumbnail from the SimplePie obj's enclosure
+			if ( $enclosure = $item->get_enclosure() ) {
+				$thumbnail = $enclosure->get_thumbnail();
+			}
+			// If that fails, fetch the fallback
+			if ( !$thumbnail ) {
+				$attachment_id = UCF_RSS_Config::get_option_or_default( 'fallback_image' );
+				if ( $attachment_id ) {
+					$thumbnail = wp_get_attachment_url( $attachment_id );
+				}
+			}
+			return $thumbnail;
+		}
 	}
 
 }

@@ -21,6 +21,7 @@ require_once 'includes/ucf-rss-shortcode.php';
 require_once 'admin/ucf-rss-admin.php';
 
 require_once 'layouts/rss-default.php';
+require_once 'layouts/rss-thumbnail.php';
 
 
 /**
