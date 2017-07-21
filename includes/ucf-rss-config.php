@@ -593,6 +593,34 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 			echo ob_get_clean();
 		}
 
+
+		/**
+		 * Returns an array of field data for the WP-Shortcode-Interface
+		 * plugin.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @return array | array of WP SCIF field data
+		 **/
+		function get_wp_scif_fields() {
+			$options = array_filter( self::get_options(), array( 'UCF_RSS_Config', 'option_is_sc_attr' ) );
+			$fields = array();
+
+			if ( $options ) {
+				foreach ( $options as $option ) {
+					$fields[] = array(
+						'param'   => $option->option_name,
+						'name'    => $option->field_title,
+						'desc'    => $option->field_desc,
+						'type'    => $option->field_type,
+						'options' => $option->field_options
+					);
+				}
+			}
+
+			return $fields;
+		}
+
 	}
 
 	// Register settings and options.
