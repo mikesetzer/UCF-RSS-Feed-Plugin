@@ -49,9 +49,18 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 		 * @return mixed | img URL string, or false on failure
 		 **/
 		public static function get_simplepie_thumbnail_or_fallback( $item ) {
+			$thumbnail = null;
+
 			// Try to get a thumbnail from the SimplePie obj's enclosure
-			if ( $enclosure = $item->get_enclosure() ) {
-				$thumbnail = $enclosure->get_thumbnail();
+			if ( $enclosures = $item->get_enclosures() ) {
+				foreach ( $enclosures as $enclosure ) {
+					$media = $enclosure->get_thumbnail() ?: $enclosure->get_link();
+					// Avoid Gravatars
+					if ( $media && ( strpos( $media, 'gravatar' ) === false ) ) {
+						$thumbnail = $media;
+						break;
+					}
+				}
 			}
 			// If that fails, fetch the fallback
 			if ( !$thumbnail ) {
@@ -60,6 +69,7 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 					$thumbnail = wp_get_attachment_url( $attachment_id );
 				}
 			}
+
 			return $thumbnail;
 		}
 	}
