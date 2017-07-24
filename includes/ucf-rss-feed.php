@@ -25,7 +25,7 @@ if ( !class_exists( 'UCF_RSS_Feed' ) ) {
 				// the hook an anonymous function. This has the side effect of
 				// allowing future requests to the given URL by other
 				// functions/plugins.
-				add_filter( 'http_request_host_is_external', function( $allow, $host, $url ) {
+				add_filter( 'http_request_host_is_external', function( $allow, $host, $url ) use ( $args ) {
 					$feed_host = parse_url( $args['url'], PHP_URL_HOST );
 					if ( $feed_host === $host ) {
 						$allow = true;
