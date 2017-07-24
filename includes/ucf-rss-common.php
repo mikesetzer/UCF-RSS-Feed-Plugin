@@ -72,6 +72,44 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 
 			return $thumbnail;
 		}
+
+		/**
+		 * Returns a sanitized SimplePie item URL.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item URL string
+		 **/
+		public static function get_simplepie_url( $item ) {
+			return esc_url( $item->get_permalink() );
+		}
+
+		/**
+		 * Returns a sanitized SimplePie item title. Applies texturization.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item title string
+		 **/
+		public static function get_simplepie_title( $item ) {
+			return wptexturize( sanitize_text_field( $item->get_title() ) );
+		}
+
+		/**
+		 * Returns a sanitized SimplePie item description. Applies
+		 * texturization and a word limit of 55.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item description string
+		 **/
+		public static function get_simplepie_description( $item ) {
+			$desc = preg_replace( '/<a [^>]+>(Continue Reading|Read more).*?<\/a>/i', '', trim( $item->get_description() ) );
+			return wp_trim_words( wptexturize( strip_shortcodes( strip_tags( $desc, '<p><a><br>' ) ) ), 55, '&hellip;' );
+		}
 	}
 
 }

@@ -40,9 +40,9 @@ if ( !function_exists( 'ucf_rss_display_default' ) ) {
 		<ul class="ucf-rss-items">
 			<?php foreach ( $items as $item ): ?>
 			<li class="ucf-rss-item">
-				<a class="ucf-rss-item-link" href="<?php echo esc_url( $item->get_permalink() ); ?>"
+				<a class="ucf-rss-item-link" href="<?php echo UCF_RSS_Common::get_simplepie_url( $item ); ?>"
                     title="<?php echo $item->get_date( 'j F Y | g:i a' ); ?>">
-                    <?php echo wptexturize( sanitize_text_field( $item->get_title() ) ); ?>
+                    <?php echo UCF_RSS_Common::get_simplepie_title( $item ); ?>
                 </a>
 			</li>
 			<?php endforeach; ?>

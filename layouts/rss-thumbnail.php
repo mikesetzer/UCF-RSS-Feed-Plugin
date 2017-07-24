@@ -41,12 +41,9 @@ if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 			<?php
 			foreach ( $items as $item ):
 				$thumbnail = UCF_RSS_Common::get_simplepie_thumbnail_or_fallback( $item );
-				$url       = esc_url( $item->get_permalink() );
-				$title     = wptexturize( sanitize_text_field( $item->get_title() ) );
-				// Try to remove "continue"/"more" links at the end of
-				// the description
-				$desc      = preg_replace( '/<a [^>]+>(Continue Reading|Read more).*?<\/a>/i', '', trim( $item->get_description() ) );
-				$desc_formatted = wp_trim_words( wptexturize( strip_shortcodes( strip_tags( $desc, '<p><a><br>' ) ) ), 55, '&hellip;' );
+				$url       = UCF_RSS_Common::get_simplepie_url( $item );
+				$title     = UCF_RSS_Common::get_simplepie_title( $item );
+				$desc      = UCF_RSS_Common::get_simplepie_description( $item );
 			?>
 			<li class="ucf-rss-item">
 				<article class="ucf-rss-item-article">
@@ -69,7 +66,7 @@ if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 						</h3>
 						<?php if ( $desc ): ?>
 						<div class="ucf-rss-item-description">
-							<?php echo $desc_formatted; ?>
+							<?php echo $desc; ?>
 							<a href="<?php echo $url; ?>" class="ucf-rss-item-link ucf-rss-item-continue">Continue reading &rsaquo;</a>
 						</div>
 						<?php endif; ?>
