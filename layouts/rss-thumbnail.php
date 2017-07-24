@@ -43,18 +43,23 @@ if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 				$thumbnail = UCF_RSS_Common::get_simplepie_thumbnail_or_fallback( $item );
 				$url       = esc_url( $item->get_permalink() );
 				$title     = wptexturize( sanitize_text_field( $item->get_title() ) );
-				$desc      = wptexturize( strip_shortcodes( strip_tags( $item->get_description(), '<p><a><br>' ) ) );
+				// Try to remove "continue"/"more" links at the end of
+				// the description
+				$desc      = preg_replace( '/<a [^>]+>(Continue Reading|Read more).*?<\/a>/i', '', trim( $item->get_description() ) );
+				$desc_formatted = wp_trim_words( wptexturize( strip_shortcodes( strip_tags( $desc, '<p><a><br>' ) ) ), 55, '&hellip;' );
 			?>
 			<li class="ucf-rss-item">
-				<article>
-					<?php if ( $thumbnail ): ?>
+				<article class="ucf-rss-item-article">
 					<div class="ucf-rss-item-details">
-						<img class="ucf-rss-item-thumbnail" src="<?php echo $thumbnail; ?>" alt="">
+						<?php if ( $thumbnail ): ?>
+						<a class="ucf-rss-item-link" href="<?php echo $url; ?>" tabindex="-1">
+							<img class="ucf-rss-item-thumbnail" src="<?php echo $thumbnail; ?>" alt="">
+						</a>
+						<?php endif; ?>
 						<div class="ucf-rss-item-pubdate">
 							<?php echo $item->get_date( 'M j' ); ?>
 						</div>
 					</div>
-					<?php endif; ?>
 					<div class="ucf-rss-item-body">
 						<h3 class="ucf-rss-item-title">
 							<a class="ucf-rss-item-link" href="<?php echo $url; ?>"
@@ -62,9 +67,12 @@ if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 								<?php echo $title; ?>
 							</a>
 						</h3>
+						<?php if ( $desc ): ?>
 						<div class="ucf-rss-item-description">
-							<?php echo $desc; ?>
+							<?php echo $desc_formatted; ?>
+							<a href="<?php echo $url; ?>" class="ucf-rss-item-link ucf-rss-item-continue">Continue reading &rsaquo;</a>
 						</div>
+						<?php endif; ?>
 					</div>
 				</article>
 			</li>

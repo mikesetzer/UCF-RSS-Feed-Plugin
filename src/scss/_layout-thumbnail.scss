@@ -1,0 +1,92 @@
+.ucf-rss-feed-thumbnail {
+  &,
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  .ucf-rss-items {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ucf-rss-item {
+    margin-bottom: 2rem;
+  }
+
+  .ucf-rss-item-article {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @media (min-width: 576px) {
+      flex-direction: row;
+    }
+  }
+
+  .ucf-rss-item-details {
+    display: block;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (min-width: 576px) {
+      align-items: center;
+      display: flex;
+      flex: 0 0 16.66667%;
+      flex-direction: column;
+      margin-right: 30px;
+      max-width: 16.66667%;
+    }
+
+    @media (min-width: 992px) {
+      flex: 0 0 12%;
+      max-width: 12%;
+    }
+
+    .ucf-rss-item-link {
+      display: block;
+      flex-shrink: 0;
+      height: auto;
+      width: 100%;
+    }
+  }
+
+  .ucf-rss-item-body {
+    flex-grow: 1;
+  }
+
+  .ucf-rss-item-thumbnail {
+    flex-shrink: 0; // make IE11 behave
+    height: auto;
+    max-width: 100%;
+  }
+
+  .ucf-rss-item-pubdate {
+    align-self: stretch;
+    background-color: #000;
+    color: #fff;
+    font-size: .8rem;
+    font-weight: bold;
+    padding: .25rem .5rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ucf-rss-item-continue {
+    display: inline-block;
+    font-style: italic;
+  }
+
+  .ucf-rss-item-title {
+    font-size: 1.25rem;
+
+    @media (max-width: 575px) {
+      text-align: center;
+    }
+  }
+}
