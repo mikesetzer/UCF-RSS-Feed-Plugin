@@ -40,7 +40,7 @@ n/a
 
 == Installation Requirements ==
 
-None
+PHP 5.3+
 
 
 == Development & Contributing ==

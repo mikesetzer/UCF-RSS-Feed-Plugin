@@ -27,6 +27,89 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 
 			return ob_get_clean();
 		}
+
+		/**
+		 * Returns the cache expiration for RSS feeds.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @return int | expiration, in seconds
+		 **/
+		public static function get_cache_expiration() {
+			return UCF_RSS_Config::get_option_or_default( 'cache_expiration' ) * HOUR_IN_SECONDS;
+		}
+
+		/**
+		 * Tries to return a thumbnail within a SimplePie item, or the fallback
+		 * image if available.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return mixed | img URL string, or false on failure
+		 **/
+		public static function get_simplepie_thumbnail_or_fallback( $item ) {
+			$thumbnail = null;
+
+			// Try to get a thumbnail from the SimplePie obj's enclosure
+			if ( $enclosures = $item->get_enclosures() ) {
+				foreach ( $enclosures as $enclosure ) {
+					$media = $enclosure->get_thumbnail() ?: $enclosure->get_link();
+					// Avoid Gravatars
+					if ( $media && ( strpos( $media, 'gravatar' ) === false ) ) {
+						$thumbnail = $media;
+						break;
+					}
+				}
+			}
+			// If that fails, fetch the fallback
+			if ( !$thumbnail ) {
+				$attachment_id = UCF_RSS_Config::get_option_or_default( 'fallback_image' );
+				if ( $attachment_id ) {
+					$thumbnail = wp_get_attachment_url( $attachment_id );
+				}
+			}
+
+			return $thumbnail;
+		}
+
+		/**
+		 * Returns a sanitized SimplePie item URL.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item URL string
+		 **/
+		public static function get_simplepie_url( $item ) {
+			return esc_url( $item->get_permalink() );
+		}
+
+		/**
+		 * Returns a sanitized SimplePie item title. Applies texturization.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item title string
+		 **/
+		public static function get_simplepie_title( $item ) {
+			return wptexturize( sanitize_text_field( $item->get_title() ) );
+		}
+
+		/**
+		 * Returns a sanitized SimplePie item description. Applies
+		 * texturization and a word limit of 55.
+		 *
+		 * @author Jo Dickson
+		 * @since 1.0.0
+		 * @param $item obj | SimplePie item obj
+		 * @return string | item description string
+		 **/
+		public static function get_simplepie_description( $item ) {
+			$desc = preg_replace( '/<a [^>]+>(Continue Reading|Read more).*?<\/a>/i', '', trim( $item->get_description() ) );
+			return wp_trim_words( wptexturize( strip_shortcodes( strip_tags( $desc, '<p><a><br>' ) ) ), 55, '&hellip;' );
+		}
 	}
 
 }

@@ -26,7 +26,7 @@ if ( ! function_exists( 'ucf_rss_shortcode_interface' ) ) {
 			'command' => 'rss-feed',
 			'name'    => 'UCF RSS Feed',
 			'desc'    => 'Displays items from an RSS feed.',
-			'fields'  => array(), // TODO
+			'fields'  => UCF_RSS_Config::get_wp_scif_fields(),
 			'content' => false,
 			'preview' => true
 		);
