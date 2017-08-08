@@ -9,21 +9,33 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 		public static function display_feed( $items, $layout='default', $args=array() ) {
 			ob_start();
 
-			if ( has_action( 'ucf_rss_display_' . $layout . '_before' ) ) {
-				do_action( 'ucf_rss_display_' . $layout . '_before', $items, $args );
+			// Before
+			$layout_before = ucf_rss_display_default_before( '', $items, $args );
+			if ( has_filter( 'ucf_rss_display_' . $layout . '_before' ) ) {
+				$layout_before = apply_filters( 'ucf_rss_display_' . $layout . '_before', $layout_before, $items, $args );
 			}
+			echo $layout_before;
 
-			if ( has_action( 'ucf_rss_display_' . $layout . '_title' ) ) {
-				do_action( 'ucf_rss_display_' . $layout . '_title', $items, $args );
+			// Title
+			$layout_title = ucf_rss_display_default_title( '', $items, $args );
+			if ( has_filter( 'ucf_rss_display_' . $layout . '_title' ) ) {
+				$layout_title = apply_filters( 'ucf_rss_display_' . $layout . '_title', $layout_title, $items, $args );
 			}
+			echo $layout_title;
 
-			if ( has_action( 'ucf_rss_display_' . $layout  ) ) {
-				do_action( 'ucf_rss_display_' . $layout, $items, $args );
+			// Main content/loop
+			$layout_content = ucf_rss_display_default( '', $items, $args );
+			if ( has_filter( 'ucf_rss_display_' . $layout ) ) {
+				$layout_content = apply_filters( 'ucf_rss_display_' . $layout, $layout_content, $items, $args );
 			}
+			echo $layout_content;
 
-			if ( has_action( 'ucf_rss_display_' . $layout . '_after' ) ) {
-				do_action( 'ucf_rss_display_' . $layout . '_after', $items, $args );
+			// After
+			$layout_after = ucf_rss_display_default_after( '', $items, $args );
+			if ( has_filter( 'ucf_rss_display_' . $layout . '_after' ) ) {
+				$layout_after = apply_filters( 'ucf_rss_display_' . $layout . '_after', $layout_after, $items, $args );
 			}
+			echo $layout_after;
 
 			return ob_get_clean();
 		}
