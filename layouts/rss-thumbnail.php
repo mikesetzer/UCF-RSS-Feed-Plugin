@@ -2,37 +2,37 @@
 
 if ( !function_exists( 'ucf_rss_display_thumbnail_before' ) ) {
 
-	function ucf_rss_display_thumbnail_before( $items, $args ) {
+	function ucf_rss_display_thumbnail_before( $content, $items, $args ) {
 		ob_start();
 	?>
 		<div class="ucf-rss-feed ucf-rss-feed-thumbnail">
 	<?php
-		echo ob_get_clean();
+		return ob_get_clean();
 	}
 
-	add_action( 'ucf_rss_display_thumbnail_before', 'ucf_rss_display_thumbnail_before', 10, 2 );
+	add_filter( 'ucf_rss_display_thumbnail_before', 'ucf_rss_display_thumbnail_before', 10, 3 );
 
 }
 
 if ( !function_exists( 'ucf_rss_display_thumbnail_title' ) ) {
 
-	function ucf_rss_display_thumbnail_title( $items, $args ) {
+	function ucf_rss_display_thumbnail_title( $content, $items, $args ) {
 		$formatted_title = '';
 
 		if ( $args['list_title'] ) {
 			$formatted_title = '<h2 class="ucf-rss-title">' . $args['list_title'] . '</h2>';
 		}
 
-		echo $formatted_title;
+		return $formatted_title;
 	}
 
-	add_action( 'ucf_rss_display_thumbnail_title', 'ucf_rss_display_thumbnail_title', 10, 2 );
+	add_filter( 'ucf_rss_display_thumbnail_title', 'ucf_rss_display_thumbnail_title', 10, 3 );
 
 }
 
 if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 
-	function ucf_rss_display_thumbnail( $items, $args ) {
+	function ucf_rss_display_thumbnail( $content, $items, $args ) {
 		if ( ! is_array( $items ) && $items !== false ) { $items = array( $items ); }
 		ob_start();
 	?>
@@ -79,23 +79,23 @@ if ( !function_exists( 'ucf_rss_display_thumbnail' ) ) {
 		<div class="ucf-rss-feed-error">No results found.</div>
 		<?php endif; ?>
 	<?php
-		echo ob_get_clean();
+		return ob_get_clean();
 	}
 
-	add_action( 'ucf_rss_display_thumbnail', 'ucf_rss_display_thumbnail', 10, 2 );
+	add_filter( 'ucf_rss_display_thumbnail', 'ucf_rss_display_thumbnail', 10, 3 );
 
 }
 
 if ( !function_exists( 'ucf_rss_display_thumbnail_after' ) ) {
 
-	function ucf_rss_display_thumbnail_after( $items, $args ) {
+	function ucf_rss_display_thumbnail_after( $content, $items, $args ) {
 		ob_start();
 	?>
 		</div>
 	<?php
-		echo ob_get_clean();
+		return ob_get_clean();
 	}
 
-	add_action( 'ucf_rss_display_thumbnail_after', 'ucf_rss_display_thumbnail_after', 10, 2 );
+	add_filter( 'ucf_rss_display_thumbnail_after', 'ucf_rss_display_thumbnail_after', 10, 3 );
 
 }
