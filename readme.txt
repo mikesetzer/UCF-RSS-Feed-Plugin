@@ -29,10 +29,6 @@ Provides a shortcode and default styles for displaying RSS feeds within post con
 
 == Changelog ==
 
-= 2.0.0 =
-Enhancements:
-* Converted layout actions to filters.
-
 = 1.0.0 =
 * Initial release
 
