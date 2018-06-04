@@ -22,8 +22,12 @@ Provides a shortcode and default styles for displaying RSS feeds within post con
 
 ## Changelog ##
 
+### 1.0.1 ###
+Bug Fixes:
+- Fixed Strict Standards PHP notice
+
 ### 1.0.0 ###
-* Initial release
+- Initial release
 
 
 ## Upgrade Notice ##
