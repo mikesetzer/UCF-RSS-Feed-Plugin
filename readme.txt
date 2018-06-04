@@ -3,7 +3,7 @@ Contributors: ucfwebcom
 Tags: ucf, rss, feed
 Requires at least: 4.7.3
 Tested up to: 4.7.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/copyleft/gpl-3.0.html
 
@@ -29,8 +29,12 @@ Provides a shortcode and default styles for displaying RSS feeds within post con
 
 == Changelog ==
 
+= 1.0.1 =
+Bug Fixes:
+- Fixed Strict Standards PHP notice
+
 = 1.0.0 =
-* Initial release
+- Initial release
 
 
 == Upgrade Notice ==
