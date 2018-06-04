@@ -656,7 +656,7 @@ if ( !class_exists( 'UCF_RSS_Config' ) ) {
 		 * @since 1.0.0
 		 * @return array | array of WP SCIF field data
 		 **/
-		function get_wp_scif_fields() {
+		public static function get_wp_scif_fields() {
 			$options = array_filter( self::get_options(), array( 'UCF_RSS_Config', 'option_is_sc_attr' ) );
 			$fields = array();
 
