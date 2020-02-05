@@ -126,13 +126,43 @@ if ( !class_exists( 'UCF_RSS_Common' ) ) {
 
 }
 
+if ( ! function_exists( 'ucf_rss_has_shortcode' ) ) {
+	function ucf_rss_has_shortcode() {
+		$has_shortcode = false;
+		$strings       = array();
+		$obj           = get_queried_object();
+
+		if ( $obj ) {
+			switch ( get_class( $obj ) ) {
+				case 'WP_Post':
+					$strings[] = $obj->post_content;
+					break;
+				default:
+					break;
+			}
+		}
+
+		foreach ( $strings as $str ) {
+			if ( has_shortcode( $str, 'rss-feed' ) ) {
+				$has_shortcode = true;
+				break;
+			}
+		}
+
+		// Allow themes/plugins to override returned value:
+		return apply_filters( 'ucf_rss_has_shortcode', $has_shortcode, $obj );
+	}
+}
+
 if ( ! function_exists( 'ucf_rss_enqueue_assets' ) ) {
 	function ucf_rss_enqueue_assets() {
+		$has_shortcode = ucf_rss_has_shortcode();
+
 		// CSS
 		$include_css = UCF_RSS_Config::get_option_or_default( 'include_css' );
 		$css_deps = apply_filters( 'ucf_rss_style_deps', array() );
 
-		if ( $include_css ) {
+		if ( $include_css && $has_shortcode ) {
 			wp_enqueue_style( 'ucf_rss_css', plugins_url( 'static/css/ucf-rss.min.css', UCF_RSS__PLUGIN_FILE ), $css_deps, false, 'screen' );
 		}
 	}
