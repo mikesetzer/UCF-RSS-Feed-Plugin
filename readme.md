@@ -15,6 +15,11 @@ Head over to the [UCF RSS Feed Plugin wiki](https://github.com/UCF/UCF-RSS-Feed-
 
 ## Changelog ##
 
+### 1.0.2 ###
+Enhancements:
+- Added plugin version number to enqueued stylesheet for cache busting.
+- Added CONTRIBUTING.md doc, Github issue/PR templates, and linter configs to the project.
+
 ### 1.0.1 ###
 Bug Fixes:
 - Fixed Strict Standards PHP notice
